@@ -1,0 +1,5 @@
+enot-latency-server
+numpy
+onnx
+onnxruntime
+Pillow
