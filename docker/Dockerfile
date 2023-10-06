@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends python3.6 python3.6-distutils python3-pip
+RUN apt-get install -y --no-install-recommends python3.6 python3.6-distutils python3-pip graphviz
 
 RUN mkdir /opt/latency_server_project/
 COPY ./ /opt/latency_server_project

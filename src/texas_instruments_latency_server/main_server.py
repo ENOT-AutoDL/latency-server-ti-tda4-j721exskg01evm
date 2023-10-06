@@ -1,5 +1,6 @@
 import argparse
 import io
+import multiprocessing
 import pickle
 import shutil
 import time
@@ -85,6 +86,15 @@ class MainLatencyServer(LatencyServer):
         self._artifacts_dir.mkdir()
         self._calibration_data_dir.mkdir()
 
+    @staticmethod
+    def _run_compilation(*args, **kwargs) -> None:
+        compiler = TICompiler(debug_level=TIDebugLevel.NO_DEBUG)
+        compiler.compile(*args, **kwargs)
+
+    def _run_isolated_compilation(self, *args, **kwargs) -> None:
+        with multiprocessing.Pool(processes=1) as pool:
+            pool.apply(self._run_compilation, args=args, kwds=kwargs)
+
     def _compile_model(self, model: bytes, calibration_data: Optional[bytes] = None) -> Path:
         onnx_model = onnx.load_model_from_string(model)
         onnx.save(onnx_model, f=str(self._model_path))
@@ -122,8 +132,7 @@ class MainLatencyServer(LatencyServer):
                     bias_calibration=True,
                 )
 
-            compiler = TICompiler(debug_level=TIDebugLevel.NO_DEBUG)
-            compiler.compile(
+            self._run_isolated_compilation(
                 model_path=self._model_path,
                 output_dir=self._artifacts_dir,
                 calibration_data_dir=self._calibration_data_dir,

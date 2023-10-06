@@ -11,7 +11,7 @@ _DIR_PATH = Path(__file__).parent.joinpath(_SRC).resolve()
 
 setup(
     name="texas-instruments-latency-server",
-    version="1.0.0",
+    version="1.0.1",
     description="Latency measurement server/client for Texas Instruments board (j721exskg01evm)",
     author="ENOT LLC",
     author_email="enot@enot.ai",
